@@ -19,16 +19,18 @@ export const pointerUp = (
   ballMovementObjects,
   bowlingPinResult,
   createBowlingPins,
-  scene
+  scene,
+  triggerComponent
 ) => {
   const bowlingBallPosition = ballMovementObjects.bowling_ball.absolutePosition;
 
   //Mapping ball Speed with respect to the dragiing of the ball
-  const ballSpeed = (-bowlingBallPosition.z - 62) * 40;
-  if (bowlingBallPosition.z < -63) {
+  //const ballSpeed = (-bowlingBallPosition.z - 62) * 40;
+  //if (bowlingBallPosition.z < -63) {
+    if(triggerComponent.value>0.25){
     //Applying impulse to the ball
     ballMovementObjects.bowlingAggregate.body.applyImpulse(
-      new BABYLON.Vector3(-aim.rotation.y * 120, 0, ballSpeed),
+      new BABYLON.Vector3(-aim.rotation.y * 120, 0,triggerComponent.value*40),
       ballMovementObjects.bowling_ball.getAbsolutePosition()
     );
     window.globalShootmusic.play();
@@ -72,7 +74,7 @@ export const pointerUp = (
           overallScoreBoardDisplay.isVisible = false;
           currentRollScoreBoardDisplay.isVisible = false;
           startMenuGUI(scene, game);
-        }, 1500);
+        }, 3500);
       }
       //switch to the next player -- marks the end of the roll
       game.switchPlayer();

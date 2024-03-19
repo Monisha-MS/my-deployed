@@ -95,18 +95,18 @@ async function createScene() {
             );
           }
           break;
-        case BABYLON.PointerEventTypes.POINTERUP:
-          aim.isVisible = false;
-          [startingPoint, currentMesh] = pointerUp(
-            startingPoint,
-            aim,
-            game,
-            ballMovementObjects,
-            bowlingPinResult,
-            createBowlingPins,
-            scene
-          );
-          break;
+        // case BABYLON.PointerEventTypes.POINTERUP:
+        //   aim.isVisible = false;
+        //   [startingPoint, currentMesh] = pointerUp(
+        //     startingPoint,
+        //     aim,
+        //     game,
+        //     ballMovementObjects,
+        //     bowlingPinResult,
+        //     createBowlingPins,
+        //     scene
+        //   );
+        //   break;
         case BABYLON.PointerEventTypes.POINTERMOVE:
           startingPoint = pointerMove(
             startingPoint,
@@ -122,7 +122,7 @@ async function createScene() {
 
   // Create a new instance of StartGame with generalPins
   let game = new StartNewGame(setPins, ["Player 1"]);
-  createAnimations(camera, scene, game);
+  //createAnimations(camera, scene, game);
   createRollSound();
   renderScoreBoard(scene);
 
@@ -137,11 +137,26 @@ async function createScene() {
     }
   });
 
-  const xrHelper = await scene.createDefaultXRExperienceAsync({
+  const xr = await scene.createDefaultXRExperienceAsync({
   
     floorMeshes: [scene.ground] /* Array of meshes to be used as landing points */,
   });
-  xrHelper.teleportation.addFloorMesh(scene.ground)
+  xr.teleportation.addFloorMesh(scene.ground);
+
+  xr.input.onControllerAddedObservable.add((controller) => {
+    controller.onMotionControllerInitObservable.add((motionController) => {
+        if (motionController.handness === 'left') {
+             const xr_ids = motionController.getComponentIds();
+             let triggerComponent = motionController.getComponent(xr_ids[0]);//xr-standard-trigger
+             triggerComponent.onButtonStateChangedObservable.add(() => {
+                 if (triggerComponent.pressed) {
+                  console.log(triggerComponent.value);
+                     pointerUp(startingPoint, aim, game, ballMovementObjects, bowlingPinResult, createBowlingPins, scene, triggerComponent);
+                 };
+             });
+        };
+    });
+  });
 
   return scene;
 }
