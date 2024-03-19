@@ -145,7 +145,7 @@ async function createScene() {
 
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {
-        if (motionController.handness === 'left') {
+        if (motionController.handness === 'right') {
              const xr_ids = motionController.getComponentIds();
              let triggerComponent = motionController.getComponent(xr_ids[0]);//xr-standard-trigger
              triggerComponent.onButtonStateChangedObservable.add(() => {
