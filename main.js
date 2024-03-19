@@ -8,7 +8,8 @@ import {
   pointerMove,
   ballMovement,
 } from "./Game_Logic/ballMovementHandler";
-import { createEnvironment } from "./Game_Environment/environment";
+import { createEnvironment} from "./Game_Environment/environment";
+
 import {
   createLights,
   createGameMusic,
@@ -42,6 +43,8 @@ async function createScene() {
   camera.inputs.clear();
   camera.attachControl();
 
+  
+
   const bowlingPinResult = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "Models/",
@@ -59,7 +62,7 @@ async function createScene() {
   let [bowling_ball, bowlingAggregate] = createBowlingBall(bowlingBallResult);
   aim.parent = bowling_ball;
 
-  createEnvironment(scene);
+  const ground=createEnvironment(scene);
   createLights();
   createGameMusic(scene);
   const lane = createBowlingLane();
@@ -139,9 +142,9 @@ async function createScene() {
 
   const xr = await scene.createDefaultXRExperienceAsync({
   
-    floorMeshes: [scene.ground] /* Array of meshes to be used as landing points */,
+    floorMeshes: [ground] /* Array of meshes to be used as landing points */,
   });
-  xr.teleportation.addFloorMesh(scene.ground);
+  xr.teleportation.addFloorMesh(ground);
 
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {

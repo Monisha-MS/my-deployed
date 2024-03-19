@@ -129,5 +129,13 @@ export const createEnvironment = (scene) => {
       restitution: 0.25,
     }
   );
-  //var xr = scene.createDefaultXRExperienceAsync({ floorMeshes: [ground] });
+  return ground
+  //export const xr = scene.createDefaultXRExperienceAsync({ floorMeshes: [ground] });
 };
+
+// export const xr = (scene)=>{
+//   scene.createDefaultXRExperienceAsync({
+//   floorMeshes: [ground] 
+// });
+// }
+
